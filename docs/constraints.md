@@ -35,10 +35,17 @@ The three families have different consequences. Process constraints affect sched
 - Methodology accordingly favours plain, widely-used tools over clever or niche ones. The point is to see and understand the wires.
 - The developer is also a **deeply experienced subject-matter expert** for the system being built — over ten years of daily use of the paper original. Domain instincts are data, not opinion. When they contradict naive software-developer reasoning, the reasoning is the thing that's wrong.
 
+### Relationship to the WhiteGlove project
+
+- **FlashFlow is a learning vehicle preparing for the WhiteGlove project**, a separate and larger build (a financially-staked prediction platform for major art auctions). WhiteGlove is multi-year, public-facing, regulated-adjacent, and runs a TypeScript/Node.js application backend with Python carved out for analytics and the pricing model.
+- Technology choices for FlashFlow should **mirror WhiteGlove's likely stack** so that the skills built here transfer directly. Specifically: JavaScript/Node.js for the application backend; Python for any algorithmic or data-processing work that has an analytical character.
+- This is a constraint, not a goal: it shapes what we choose, but FlashFlow itself does not need to *meet* WhiteGlove's requirements (different scale, different audience, different regulatory context).
+
 ### Tooling and ecosystem
 
 - **GitHub** is the remote repository host. Username `fhneuhaus`, repository `flashflow`.
-- Development happens on macOS using Terminal, a text editor, and Git on the command line.
+- Development happens on macOS using Terminal, a text editor (VS Code), and Git on the command line.
+- Languages biased toward those that transfer to WhiteGlove: JavaScript/Node.js for application code, Python for analytical or scripting code (such as the CSV import script).
 
 ### AI assistance
 
@@ -96,8 +103,10 @@ A few things people might assume are constraints but are not:
 
 **The "user attention" and "card intake rate" constraints together form the dominant fact shaping the daily review experience.** Frictionless, fast, calm — those are the design implications of the attention budget. Disciplined intake — adding cards at a rate the system can metabolise — is the design implication of the intake-rate ceiling. Violating either compounds into abandonment of the system.
 
-**The "skill level" constraint is unusual to state explicitly** but earns its place. It justifies downstream choices that might otherwise look conservative: SQLite over a heavier database, Flask over Django, plain HTML/CSS over a frontend framework. The wires stay visible. A team of seasoned engineers would make different trade-offs; we are deliberately not that team.
+**The "skill level" constraint is unusual to state explicitly** but earns its place. It justifies downstream choices that might otherwise look conservative: SQLite over a heavier database, Express over Django, plain HTML/CSS over a frontend framework. The wires stay visible. A team of seasoned engineers would make different trade-offs; we are deliberately not that team.
 
 **The "domain expertise" half of the skill constraint is also unusual but earns its place.** The developer is new to *software*, but very experienced with the *system being built*. This is the rare configuration in which Domain-Driven Design's ubiquitous language is achieved by construction — the domain expert and the developer are the same person. The implication for working method: when the developer's instinct about the system contradicts a draft design, pause and write down what the instinct implies before continuing.
 
 **The "AI assistance" constraint is also an honest description of how this work happens.** Pretending otherwise would produce a project document that doesn't match the project. Naming it allows the design to anticipate it — for example, by producing artefacts that an AI-assisted workflow can readily resume from (which is exactly what the session-progress notes do).
+
+**The "WhiteGlove" constraint changes the technology bias.** Earlier in the design process, before this constraint was articulated, the preliminary lean was toward Python for the FlashFlow backend (gentler syntax, simpler frameworks, pleasant for the scheduler logic). Once WhiteGlove's profile was understood, the lean shifted to JavaScript/Node.js — because skills transferable to WhiteGlove's application backend matter more than marginal pleasantness on FlashFlow itself. Python remains relevant: for the CSV import script, and as a learning second language for any future analytical work that mirrors WhiteGlove's pricing-model service.
