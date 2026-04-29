@@ -1,38 +1,102 @@
 # FlashFlow — Session 01 Progress
 
 *Date: 2026-04-29*
-*Status: paused on environment setup, awaiting Apple developer infrastructure recovery*
+*Duration: ~6 hours of FlashFlow work, across morning and afternoon*
+*Status: end of session 01. Layers 1–4 complete (vision, goals, constraints, glossary). Layer 5 (domain model) and 6 (workflows) still to draft. Two-machine development setup working.*
 
 ---
 
 ## What this session was about
 
-The first working session of the FlashFlow project — a digital re-implementation of a long-running paper spaced-repetition flashcard system. The session was deliberately conceptual rather than implementation-focused, with the user pushing back appropriately when the assistant jumped ahead to specifics before the foundations were laid.
+The first working session of the FlashFlow project — a digital re-implementation of a long-running paper spaced-repetition flashcard system. Conceptual work throughout, with environment setup as the secondary track. The user pushed back substantively whenever the assistant jumped ahead to specifics before foundations were laid; those pushbacks shaped most of the day's design decisions.
 
-A second-order goal also emerged: FlashFlow's first subject will be **Software Craft** — the vocabulary and disciplines of software development being learned during the build itself. The system will be used to commit to memory the concepts encountered while building it.
+A reinforcing loop emerged: FlashFlow's first subject will be **Software Craft** — the vocabulary and disciplines being learned during the build itself.
 
 ---
 
-## Major decisions and pivots
+## Major decisions and pivots (in order encountered)
 
-### Subject pivot: Art History → Software Craft
+### 1. Subject pivot: Art History → Software Craft
 
-Originally the v1 subject was Art History, with a one-shot Excel import as part of the v1 scope. Late in the session this was changed: the starting subject is now **Software Craft**, with cards authored in-app from scratch as concepts come up during the build. Art History is deferred to a later iteration.
+The starting subject changed from Art History (with a one-shot Excel import) to Software Craft (cards authored during the build). Art History deferred to a later iteration. Removed Excel import from v1 scope.
 
-**Consequence**: the Excel import is no longer in v1 scope. This simplifies v1 (no parser for German date formats, multi-line cells, German column names, etc.) and forces the in-app authoring path to be exercised properly from day one.
+### 2. Project context instructions saved in Claude.ai
 
-### Project context instructions saved
+A custom-instructions block was drafted and saved into the Project's context. It establishes the nine-layer top-down sequence, jargon-on-first-use discipline, the user-runs-commands principle, formality-matches-scale, and project shape. Persists across conversations.
 
-A custom-instructions block was drafted and saved into the Project's context in Claude.ai. It establishes:
+### 3. Vision document accepted
 
-- The nine-layer top-down sequence as the working method.
-- The discipline of naming concepts and expanding acronyms on first use.
-- The user runs commands, edits files, writes code; the assistant explains, proposes, reviews, debugs.
-- Match formality to scale (solo project, ~50 hours, single user).
-- Default to short answers plus a question; produce consolidation notes at breakpoints.
-- Project shape: 50 hours, JavaScript/Python/Git focus, PWA on iPhone, Software Craft as starting subject.
+One paragraph. FlashFlow is a single-user web application that brings the paper SRS into digital form across three devices, preserves the distinctive features of the paper original, and serves as a learning vehicle. Saved as `docs/vision.md`.
 
-This persists across conversations within the Project. New sessions will land already configured.
+### 4. Goals and Non-Goals document accepted, after substantive iteration
+
+Three pieces of pushback shaped the final draft:
+
+- **CSV import is needed.** User's actual workflow generates 300–600 cards per course as a batch (AI drafts notes → user proofreads → AI drafts cards → user proofreads → CSV). Pure in-app authoring would be incompatible.
+- **CSV import belongs at the command line.** A web upload feature is wildly disproportionate for a one-user, occasional-batch operation. Surfaced the **application code vs operational code** distinction.
+- **Edit-during-review is its own workflow.** When a card's wording is bad mid-review, the natural fix is one tap from the review screen, not navigate-and-find. Surfaces the **edit-in-place** design principle.
+
+The "no AI-generated cards" non-goal was revised to "no in-app AI features" — drawing the line at FlashFlow's own surface, not at the user's upstream pipeline.
+
+A late-session addition: **cognitive-load goal** — keep first-try recall in 80–90% band, answers ≤3 items. Added because spaced repetition is a motivation system as much as a memory system.
+
+### 5. Constraints document accepted, with mid-session restructuring
+
+Originally a flat list. User noticed the document mixed two kinds of constraint, and the assistant introduced the standard taxonomy: **process / product / business**. Restructured with explicit groups. Empty business-constraints section kept deliberately rather than omitted (the same pattern as "What is *not* a constraint").
+
+Two domain-expert constraints were surfaced by the user:
+
+- **Card intake rate ceiling**: ~10–20 new cards/day in steady state, derived from interval-ladder math (each new card produces 8–10 reviews over its lifetime, front-loaded into the first month).
+- **The user is also a deeply experienced subject-matter expert** for the system being built. Domain instincts are data, not opinion.
+
+### 6. Glossary document accepted
+
+The vocabulary of FlashFlow. Subject, Chapter, Card, Question/Answer, Ladder, Ladder Entry, Interval, Pass/Fail, Same-day re-attempt, Demotion, Stack, Review, Source, Import. Plus a "Terms we are not using" section explicitly excluding Anki vocabulary (Deck, Note, ease factor, bury/suspend/leech, Tag).
+
+Three open questions resolved by user choice:
+
+- Source attribution: **inheritable** through subject → chapter → card cascade with override at any level.
+- Today's collection of due cards: **Stack**.
+- Review outcomes: **Pass / Fail** (clean, binary, neutral).
+
+The Ladder entry was clarified as **append-only** — entries are never deleted, even on demotion. Where the paper system erases, FlashFlow preserves. This is a deliberate improvement on the paper original.
+
+The user also surfaced the **forgiveness on missed days** principle (a card due in the past is simply due now; no penalty for lateness; backlog spreading is a v2 problem).
+
+### 7. Backlog document created
+
+A new artefact, not part of the nine-layer sequence but adjacent to it. Captures v2+ items deferred from v1. Six items at session end: Excel import, offline mode, backlog spreading, edit history, statistics, multi-user. Plus an empty "Considered and rejected" section.
+
+### 8. Development environment fully set up — twice
+
+Apple's Command Line Tools auto-installer was broken in the morning ("Softwareupdateserver nicht verfügbar"). Three install paths failed before a macOS update from 26.0.1 to 26.4.1 unstuck it. After that, full install proceeded smoothly:
+
+**iMac**:
+- Git 2.50.1
+- User identity configured (Friedrich Neuhaus, fhneuhaus@gmx.de)
+- SSH key generated and registered with GitHub as `iMac (fn)`
+- Homebrew 5.1.8
+- VS Code 1.118.0 with shell command enabled
+
+**MacBook** (afternoon, in preparation for working from home):
+- Git 2.50.1 (already installed)
+- Same identity configured
+- Separate SSH key generated and registered as `MacBook (fn)`
+- Homebrew 5.1.8
+- VS Code 1.117.0 with shell command enabled
+- Repository cloned via `git clone git@github.com:fhneuhaus/flashflow.git`
+
+Both Macs synced at the same commit hash. Two-machine workflow ready: `git pull` before starting, `git push` before stopping.
+
+### 9. Repository on GitHub
+
+`github.com/fhneuhaus/flashflow` (public). Three commits at end of day:
+
+- `ee04495` — Initial commit: vision, goals, original system description, README, session note
+- `93f78d6` — Revise goals.md and add constraints.md
+- `7271405` — Add glossary.md and backlog.md (layer 4 complete)
+
+Plus a fourth commit pending at end of session for the afternoon's revisions (cognitive-load goal added, intake-rate constraint added, plus this session note and the seed cards CSV).
 
 ---
 
@@ -40,137 +104,132 @@ This persists across conversations within the Project. New sessions will land al
 
 ### The nine-layer software development sequence
 
-Top-down sequence from problem-space to solution-space, where each layer constrains the next:
+Top-down from problem-space (1–6) to solution-space (7–9): Vision · Goals/non-goals · Constraints · Glossary · Domain model · Workflows · Architecture · Tech stack · Roadmap.
 
-1. **Vision** — one paragraph: why the system exists, what success looks like.
-2. **Goals and non-goals** — what is in scope, what is explicitly out.
-3. **Constraints** — environmental, temporal, technical, personal.
-4. **Ubiquitous language / glossary** — terms and their definitions, used identically in conversation, code, and database.
-5. **Domain model** — entities and their relationships, in entity-relationship style.
-6. **Use cases / workflows** — what the user does, step by step.
-7. **Architecture** — how the system is structured into layers, independent of specific technology.
-8. **Tech stack** — concrete tools and libraries.
-9. **Roadmap / implementation plan** — the order in which things get built.
+### Vocabulary introduced this session (with sources)
 
-Layers 1–6 are problem-space. Layers 7–9 are solution-space. The discipline is to finish thinking about *what* before deciding *how*.
+**Methodology and process**:
+- Domain-Driven Design (Eric Evans, 2003) and the **ubiquitous language**
+- Entity-relationship model (Peter Chen, 1976)
+- Bounded contexts
+- Architecture Decision Records (Michael Nygard, ~2011)
+- Conway's Law (Melvin Conway, 1967)
+- Cargo-culting; setup theatre
+- Front-loading risk / long-pole items
+- Backlog vs. roadmap
+- Goal vs. constraint distinction; null sections
 
-### Concepts and vocabulary introduced
+**Domain modelling**:
+- Domain model vs. data model
+- Append-only vs. mutable data structures
 
-- **Domain-Driven Design (DDD)** — Eric Evans, 2003. The discipline of using the same vocabulary in conversations, code, and database. The shared vocabulary is the **ubiquitous language**.
-- **Entity-relationship model (ERM)** — Peter Chen, 1976. The classical way of describing what the things in a system are and how they connect. Modern variant: **UML** (Unified Modelling Language) class diagrams.
-- **Domain model vs. data model** — domain model is about concepts in the problem space; data model is about how they are stored. Look alike in small systems, diverge in large ones.
-- **Bounded contexts** — DDD's name for the natural seams in a large domain. Doesn't apply at FlashFlow scale.
-- **Spaced repetition system (SRS)** — category of learning software that schedules reviews at expanding intervals. Anki, SuperMemo are well-known examples.
-- **Progressive Web App (PWA)** — a regular website with extra configuration that lets a phone treat it as an installed app: home-screen icon, full-screen, optionally offline-capable.
-- **Artefact** — anything tangible the project produces other than the running software itself: documents, diagrams, configuration, test reports. Distinct from **build artefacts** (compiled outputs of source code).
-- **Architecture Decision Record (ADR)** — Michael Nygard, ~2011. Short, dated, immutable note capturing why a significant architectural choice was made. Not needed at this scale; will matter at larger scale.
-- **Conway's Law** — Melvin Conway, 1967. Systems mirror the communication structure of the organisations that build them.
-- **Docs-as-code** — treating documentation as a first-class engineering artefact, version-controlled alongside source code. Mid-2010s shift; now the default.
-- **Git** — distributed version-control system, Linus Torvalds 2005. Tracks changes to files over time. A command-line tool by nature.
-- **GitHub** — hosting service for Git repositories, owned by Microsoft. Not the same as Git: Git is the tool, GitHub is the place. Competitors: GitLab, Bitbucket.
-- **Working directory / local repository / remote repository** — the three places a Git project lives. Files flow between them via `git add`, `git commit`, `git push`, `git pull`.
-- **Commit** — the atomic unit of Git history. Snapshot of staged changes with author, date, message, and unique identifier.
-- **Homebrew** — package manager for macOS, ~2009. De-facto standard among Mac developers. Installs other tools via `brew install <name>`.
+**Tools and infrastructure**:
+- Git (Linus Torvalds, 2005); GitHub
+- Working directory / staging area / repository
+- Commits, hashes, the `..` range syntax
+- `origin` as the conventional remote name
+- SSH key pairs (private stays, public goes to GitHub)
+- Public-key cryptography (1970s, foundation of internet security)
+- Homebrew (~2009) and its beer-themed vocabulary (formula / cask / tap)
+- Smart quotes harmful in the terminal
+- Piping in Unix
 
-### How this changes at scale
+**Design principles**:
+- Edit-in-place
+- Application code vs. operational code
+- Forgiving vs. punishing SRS schedulers
+- Docs-as-code (mid-2010s industry shift)
 
-The nine-layer sequence is the same on a one-person project and a thousand-person one. What changes:
+**Project vocabulary**:
+- Artefact vs. build artefact
+- Progressive Web App (PWA)
+- Spaced Repetition System (SRS)
 
-- **Depth** — same shape, vastly more evidence underneath each layer.
-- **Formality** — paragraph in markdown vs. signed-off corporate document.
-- **People** — solo brain vs. specialised roles with handoffs.
+### Two meta-principles reinforced through use
 
-What appears only at scale: stakeholder management, non-functional requirements as contractual obligations, ADRs, formal project management (agile, Scrum, Kanban, waterfall, SAFe — Scaled Agile Framework), DevOps machinery (CI/CD — continuous integration / continuous deployment, staging, feature flags, rollback), and organisational design as an architectural concern.
+**Higher layers should change more slowly.** Vision rarely; goals per version; tech stack when painful; roadmap weekly. Editing the Vision often signals lower-layer creep.
 
-### Traps to remember
+**Requirements are best elicited from concrete moments of use.** Twice the user's "but in my actual workflow..." correction reshaped a goal that abstract reasoning had gotten wrong. Generic "what does a flashcard app need" produces wrong answers; specific "when a course finishes, I have 300 cards in a batch" produces right ones.
 
-- **Cargo-culting enterprise process** — adopting heavyweight artefacts on small projects because they look professional. They aren't, at this scale.
-- **Resisting useful structure** — refusing version control, vision documents, or domain sketches because they feel like overhead. On a solo project they are the minimum that lets you think clearly.
-- **Heuristic** — every artefact should answer a question someone will actually ask. If no one will ask, don't write it. If future-you will ask it tomorrow, write it now.
+### Trap surfaced and named
 
----
-
-## Project-specific decisions made (preliminary, subject to revision)
-
-These came up during the conceptual work but have not yet been formalised as documents:
-
-- **Six domain concepts** identified: Subject, Chapter, Card, Ladder Entry, Review Event, Schedule. With a likely merger of Review Event into Ladder Entry.
-- **The ladder is the primary record**, not a derived field. Store the full ladder history per card; compute next-review-date from it. Never delete entries, even on demotion.
-- **Three workflows**: daily review (the heart), authoring (occasional), maintenance (rare). V1 must nail the daily workflow.
-- **Same-day re-attempts**: failed cards go to the bottom of today's stack, re-appear in same session. On successful re-attempt, the card is demoted by one rung.
-- **One open question**: what happens if the same-day re-attempt itself fails? Three plausible behaviours, leaning toward "keep retrying same-day until it passes, demote once."
-- **Out of v1 scope**: images, audio, statistics, tags, suspension, sharing, native mobile apps, multi-user, Excel import.
+**Cargo-culting enterprise process** at solo scale produces overhead without benefit. Match formality to scale. The corollary: resisting *useful* structure (Git, vision documents, glossary) because it feels like enterprise overhead is the equally bad opposite.
 
 ---
 
 ## Methodology decisions for how we work
 
-- **Project context instruction in place** in Claude.ai (saved this session).
-- **Periodic consolidation notes** as markdown files, numbered (`session-NN-progress.md`), at conceptual breakpoints not on a clock. Live in `docs/learning-journal/` once the repository exists.
-- **Docs-as-code** — all documentation lives in the repository alongside the code, version-controlled together.
-- **The user runs commands, the assistant explains** — no silently-done work.
-
----
-
-## Where we got stuck
-
-**Environment setup blocker.** Attempting to install Git on the iMac (macOS 26.0.1, "Tahoe") hit Apple's *"Die Software kann nicht installiert werden, da sie derzeit auf dem Softwareupdateserver nicht verfügbar ist"* error on three separate paths:
-
-1. The `xcode-select` auto-installer triggered by running `git --version` for the first time.
-2. The Homebrew installation script, which routes through the same Apple endpoint for the Command Line Tools dependency.
-3. The Apple developer site direct-download fallback was unreachable (login problems, then catalogue dominated by 26.5 betas with no clear stable 26.x option visible).
-
-This is an Apple-side infrastructure issue, not anything the user did. Hitting it on three different paths within a short window indicates a real outage.
-
-A macOS point-release update (26.0.1 → 26.4.1) is available but was deferred — it might (no guarantee) refresh whatever's confusing Apple's catalogue endpoint, but a 30–90 minute OS update is too expensive to gamble on as a fix.
+- **Project context instruction in place** in Claude.ai. Persists across conversations.
+- **Periodic consolidation notes** as markdown files (`session-NN-progress.md`), at conceptual breakpoints. Live in `docs/learning-journal/`.
+- **Docs-as-code** — all documentation lives in the repository alongside code, version-controlled together.
+- **The user runs commands, the assistant explains.** No silently-done work.
+- **Flashcard discipline**: ≤3 atomic items per answer, definition-shaped (not advice), capped at ~24/day in seeding bursts but ~10–15/day in steady state per the intake-rate constraint.
+- **Single source of truth for cards**: `software-craft-seed-cards.csv` in the project root, appended to each session, eventually loaded via the v1 import script.
 
 ---
 
 ## Where we are now
 
-- **GitHub account**: created. Profile name: Friedrich Neuhaus. Username not yet recorded — should be noted at start of next session.
-- **iMac**: Terminal works. Git not installed. macOS 26.0.1.
-- **Repository**: not yet created on GitHub or locally.
-- **Local Git identity**: not yet configured.
-- **SSH keys**: not yet set up.
-- **Project context in Claude.ai**: saved this session.
+### Documents in the repository
 
-Effectively: a GitHub account, an empty Mac, project context in place, no working Git in between.
+```
+flashflow/
+├── README.md
+└── docs/
+    ├── vision.md                       (Layer 1 ✓)
+    ├── goals.md                        (Layer 2 ✓, twice revised)
+    ├── constraints.md                  (Layer 3 ✓, restructured)
+    ├── glossary.md                     (Layer 4 ✓)
+    ├── backlog.md                      (Adjunct ✓)
+    ├── flashcard-system-original.md    (Reference)
+    └── learning-journal/
+        └── session-01-progress.md      (This file)
+```
+
+### Pending end-of-day commit
+
+Four files changed since the last push:
+- `goals.md` — adds cognitive-load goal, plus forgiveness goal, plus no-spreading non-goal
+- `constraints.md` — adds card-intake-rate constraint, refines skill-level with SME half
+- `session-01-progress.md` — this file, replacing the previous version
+- `software-craft-seed-cards.csv` — new file, 52 cards total
+
+### Time check
+
+~5 hours of FlashFlow work spent (excluding lunch and other interruptions). ~10% of the 50-hour budget. Roughly on schedule with a small cushion. The remaining 45 hours include all code work; the easy hours are now behind us.
 
 ---
 
-## Next session — proposed pickup points
+## Resume — first actions next session
 
-Two paths, in priority order:
+The natural pickup point is **Layer 5 — the domain model**. The glossary defines the entities; the domain model states their relationships. Subject contains Chapters; Card has a Ladder; Ladder consists of Ladder Entries. Roughly 30–45 minutes of work, builds directly on the glossary.
 
-### Path A — retry the environment setup
-1. Try `git --version` in Terminal. If Apple's infrastructure has recovered, the install dialog should appear and work. (5–15 minute install.)
-2. If still broken, fall back to manual download from the Apple developer site (`developer.apple.com/download/all/`), filtering for **"Command Line Tools for Xcode 26"** non-beta entries, highest stable version dated autumn 2025.
-3. Once Git is installed: configure `user.name` and `user.email` (matching the GitHub email).
-4. Set up SSH keys for GitHub authentication.
-5. Create the `flashflow` repository on GitHub (private, no auto-init).
-6. Initialise local repo, connect to remote, first commit, push.
+Then **Layer 6 — workflows** (use cases). What the user does, step by step, in each of the system's main scenarios. Daily review, in-app authoring, edit-during-review, maintenance.
 
-### Path B — productive conceptual work without Git
-Draft the missing top layers (markdown, no tooling required):
+After those two, the entire problem-space is complete and we move to solution-space (architecture, tech stack, roadmap).
 
-1. **Vision** — one-paragraph statement of why FlashFlow exists.
-2. **Goals and non-goals** — explicit lists.
-3. **Constraints** — already mostly stated; formalise them.
-4. **Glossary** — the ubiquitous language for the project: Subject, Chapter, Card, Ladder, Pass, Fail, etc.
+To resume on either Mac:
 
-Once these exist as drafts, they go into the repository as the first content of the first commit when Git is finally working.
+```
+cd ~/Projects/flashflow
+git pull
+```
 
-**Recommendation**: Path B is the better use of time during the Apple outage. Path A can be retried opportunistically — every few hours, run `git --version` and see if Apple has come back.
+Then either Mac is ready. Open with `code .` if VS Code is wanted.
 
 ---
 
 ## Reflections on the session
 
-- **The user pushed back twice on the assistant jumping ahead** — once when going from domain model straight to storage decisions, once when using "SRS" without expanding it. Both pushbacks were correct and led to better outcomes. The methodology instruction added to the project context should reduce this in future.
-- **Setup work is failure-prone**, especially on first contact with a new machine. Roughly an hour of this session was spent fighting an Apple outage. This is normal. Experienced developers are not better at making setup work first try — they're better at recognising when to switch paths.
-- **The conceptual work that did happen was solid** and produced a real shared understanding of the system. None of it is wasted.
-- **The Software Craft pivot is a notable improvement** to the original brief. It tightens v1 (no Excel import) and creates a reinforcing loop between the system being built and the learning happening during the build.
+- **The user's pushbacks were the most valuable contributions.** The CSV-import-as-script decision, the edit-during-review distinction, the cognitive-load goal, the card-intake-rate constraint, the goal-vs-constraint editorial discipline, the missed-days/forgiveness principle, and the backlog adjunct all came from user instinct or correction. Without them the design would have been generic.
+
+- **Setup work cost about an hour to Apple's broken installer**, plus another 30 minutes to the MacBook setup. About 25% of the day on environment, which is high but front-loaded — the same setup cost is now zero for every future session.
+
+- **The two-machine workflow is real, not theoretical.** Setting up the MacBook before leaving the office means the home session resumes in seconds rather than starting cold. Tomorrow morning's evidence will confirm whether the discipline holds (`git pull` before starting work).
+
+- **The flashcard discipline matured over the day.** The morning's first batch had bloated multi-item cards; the user caught it; the afternoon revision applied the discipline retroactively to morning cards too. The result: 52 cards, each atomic, each recallable. The single-discipline rule beats the inconsistent-but-historical one.
+
+- **The Software Craft pivot continues to pay dividends.** Cards generated this session capture concepts encountered while building. The reinforcing loop is real: future-you, reviewing these cards, will encounter the same vocabulary that shaped the project's first day.
 
 ---
 
