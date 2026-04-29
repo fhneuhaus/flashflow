@@ -1,6 +1,6 @@
 # FlashFlow — Backlog
 
-*Status: living document · Last updated: 2026-04-29*
+*Status: living document · Last updated: 2026-04-29 (revised)*
 
 Items known to be desirable but deferred from v1. New ideas that don't fit the v1 scope land here rather than being lost. Items leave this document either by being scheduled into a future version or by being explicitly abandoned (in which case they move to a "Considered and rejected" section, not deleted, so the reasoning is preserved).
 
@@ -69,6 +69,46 @@ This document complements but is distinct from the roadmap (layer 9 of the desig
 **What it would take**: a real auth system (sessions, password hashing, possibly OAuth), data scoping by user across every database query, multi-tenancy in the deployment. Significant — probably 10+ hours of work that would also rewrite parts of v1.
 
 **Source**: implicit in the single-user constraint and non-goal.
+
+---
+
+### Subject and chapter filtering for review
+
+**Why deferred**: in v1 the user always sees the full stack of everything currently due. Filtering by subject or chapter would let the user say "today I want to focus on German" or "drill chapter X." Real value when the user holds multiple subjects, but no value while only one subject (Software Craft) exists.
+
+**What it would take**: a query parameter on the stack-fetching endpoint, a small UI element to set/clear the filter, decisions about whether the filter persists across app opens. Probably 2–3 hours.
+
+**Source**: session 01, workflow design discussion. Locked as v1 non-feature when "always full stack" was chosen for Workflow A.
+
+---
+
+### Undo for review actions
+
+**Why deferred**: if the user misclicks Pass when they meant Fail (or vice versa), the ladder records the wrong outcome. Adding undo means tracking in-session state of recently-reviewed cards and being able to reverse the last ladder entry.
+
+**What it would take**: a small undo buffer in the client, plus an API endpoint to remove the most recent ladder entry on a card. Maybe 2–3 hours. Revisit only if real usage shows the misclick rate is genuinely annoying.
+
+**Source**: session 01, workflow A design notes.
+
+---
+
+### External reminders for unresolved fails
+
+**Why deferred**: when the user fails a card and closes the app, the soft in-app reminder ("3 cards from today need a second look") only appears the next time they open the app. An external reminder (push notification, email, calendar) would actively prompt the user to come back.
+
+**What it would take**: web-push infrastructure (service worker, VAPID keys, browser permission flow) for push notifications, or a sending service for email/calendar. Each path is meaningful work and adds external dependencies. 5–8 hours.
+
+**Source**: session 01, workflow A discussion — refinement to dimension 1 (when failed cards return). The in-app banner is the v1 answer; external reminders are the v2 escalation.
+
+---
+
+### CSV import idempotency
+
+**Why deferred**: running the v1 import script twice on the same CSV will create duplicate cards. The user is responsible for not doing this. Detecting duplicates and skipping them (idempotent imports) is a real refinement but adds complexity to the script.
+
+**What it would take**: a uniqueness check on each row before insert (probably by hashing question+answer or by some other identity rule), plus reporting of skipped rows in the script's summary. 1–2 hours.
+
+**Source**: session 01, workflow E design notes.
 
 ---
 
