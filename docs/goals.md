@@ -1,6 +1,6 @@
 # FlashFlow — Goals and Non-Goals (v1)
 
-*Status: accepted · Date: 2026-04-29*
+*Status: accepted · Date: 2026-04-29 (revised)*
 
 This document defines what FlashFlow v1 must do (Goals) and what it explicitly will not do (Non-Goals). It scopes the 50-hour build window. Decisions to add, remove, or change items in either list should be made deliberately and recorded as updates to this document.
 
@@ -13,6 +13,8 @@ What v1 must deliver to be considered successful.
 - **Faithfully implement the paper system's review mechanic** — interval ladder, doubling progression, demotion-on-failure rule, same-day re-attempts. The scheduler is the part that must be correct above all.
 
 - **Surface the ladder visibly in the UI**, mirroring the role of the marginal pencil notation on the paper card. The user can see at a glance where any card sits in its review history.
+
+- **Keep cards in a sustainable difficulty range.** Card content and review pacing must be shaped to keep first-try recall in roughly the 80–90% band. Answers must not exceed three items; concepts requiring more must be split into multiple cards. Sessions must not generate failure backlogs large enough to be discouraging.
 
 - **Run on iMac, MacBook, and iPhone** through a single web codebase, installable as a Progressive Web App on the phone.
 
@@ -67,3 +69,5 @@ Several of these decisions are deliberate trade-offs worth flagging for future r
 **The "no in-app AI" line is drawn deliberately.** AI as a tool in the user's upstream workflow is not only acceptable but explicitly anticipated (the import path is shaped to accommodate it). What is excluded is AI baked into the application's own features — auto-generation, suggestion, assisted review. The user's attention and judgement remain the active ingredients in the spaced-repetition loop.
 
 **The split between in-app authoring and command-line import is also deliberate.** Bulk operations belong in scripts, where they require intentional invocation and cannot be triggered by accident. Single-card operations belong in the UI, where they fit the natural rhythm of using the system. Treating these as one feature would over-complicate the web app and under-protect the bulk path.
+
+**The cognitive-load goal exists because spaced repetition is a motivation system as much as a memory system.** A spaced-repetition system that produces frustration kills its own use. Keeping first-try recall in the 80–90% band — the "desirable difficulty" zone described in cognitive psychology — keeps the loop sustainable. This applies to card authoring, card splitting, and the pacing of sessions.
