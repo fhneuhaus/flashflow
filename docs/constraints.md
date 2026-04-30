@@ -35,6 +35,12 @@ The three families have different consequences. Process constraints affect sched
 - Methodology accordingly favours plain, widely-used tools over clever or niche ones. The point is to see and understand the wires.
 - The developer is also a **deeply experienced subject-matter expert** for the system being built — over ten years of daily use of the paper original. Domain instincts are data, not opinion. When they contradict naive software-developer reasoning, the reasoning is the thing that's wrong.
 
+### Location and timezone
+
+- The developer works in **Berlin, Central European Time** (CET in winter, CEST in summer).
+- This is the developer's *current* location; it may change. The implication for FlashFlow: the scheduler's day-boundary computation must be **timezone-aware** rather than hard-coded to a specific region. "Today" for a card being due means "today in the user's local time," not "today UTC" or "today in the server's region."
+- Concretely: the user's timezone should be a configurable value the scheduler reads, not a constant baked into the algorithm. The default value can be Europe/Berlin; the option to change it must exist.
+
 ### Relationship to the WhiteGlove project
 
 - **FlashFlow is a learning vehicle preparing for the WhiteGlove project**, a separate and larger build (a financially-staked prediction platform for major art auctions). WhiteGlove is multi-year, public-facing, regulated-adjacent, and runs a TypeScript/Node.js application backend with Python carved out for analytics and the pricing model.
@@ -110,3 +116,5 @@ A few things people might assume are constraints but are not:
 **The "AI assistance" constraint is also an honest description of how this work happens.** Pretending otherwise would produce a project document that doesn't match the project. Naming it allows the design to anticipate it — for example, by producing artefacts that an AI-assisted workflow can readily resume from (which is exactly what the session-progress notes do).
 
 **The "WhiteGlove" constraint changes the technology bias.** Earlier in the design process, before this constraint was articulated, the preliminary lean was toward Python for the FlashFlow backend (gentler syntax, simpler frameworks, pleasant for the scheduler logic). Once WhiteGlove's profile was understood, the lean shifted to JavaScript/Node.js — because skills transferable to WhiteGlove's application backend matter more than marginal pleasantness on FlashFlow itself. Python remains relevant: for the CSV import script, and as a learning second language for any future analytical work that mirrors WhiteGlove's pricing-model service.
+
+**The "location and timezone" constraint exists primarily to inform the scheduler design.** The paper system has no concept of timezone — "today" is whatever the user thinks today is, written by hand. A digital system has to commit to a definition. Saying explicitly that the scheduler must be timezone-aware (rather than UTC-default or server-local-default) prevents a category of subtle bugs where reviews appear due "yesterday" or "tomorrow" depending on which clock the system happens to consult.
