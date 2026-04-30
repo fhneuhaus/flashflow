@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FlashFlow — Card</title>
+  <style>
+    body { font-family: -apple-system, system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .breadcrumb { font-size: 0.85rem; color: #666; margin-bottom: 1.5rem; }
+    .breadcrumb a { color: #0066cc; text-decoration: none; }
+    .question, .answer { padding: 1rem; border-radius: 6px; margin-bottom: 1rem; }
+    .question { background: #f4f4f4; }
+    .answer { background: #fafff4; border: 1px solid #e8f0d8; }
+    .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-bottom: 0.25rem; }
+    .ladder { font-family: 'SF Mono', Menlo, monospace; font-size: 0.95rem; padding: 0.75rem 1rem; background: #f9f9f9; border-radius: 4px; }
+    .ladder-empty { color: #888; font-style: italic; }
+  </style>
+</head>
+<body>
+  <div class="breadcrumb">
+    <a href="/">← All cards</a> · <%= card.subject_title %> · <%= card.chapter_title %>
+  </div>
+
+  <div class="question">
+    <div class="label">Question</div>
+    <%= card.question %>
+  </div>
+
+  <div class="answer">
+    <div class="label">Answer</div>
+    <%= card.answer %>
+  </div>
+
+  <div>
+    <div class="label">Ladder</div>
+    <div class="ladder">
+      <% if (ladderEntries.length === 0) { %>
+        <span class="ladder-empty">No entries yet.</span>
+      <% } else { %>
+        <% ladderEntries.forEach(function(entry, i) { %>
+          <% if (i > 0) { %> — <% } %>
+          <% if (entry.kind === 'initial') { %>a<% } %>
+          <% if (entry.kind === 'pass') { %><%= entry.interval_days %><% } %>
+          <% if (entry.kind === 'fail') { %>X<% } %>
+        <% }); %>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>
