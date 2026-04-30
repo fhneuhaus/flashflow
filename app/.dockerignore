@@ -1,0 +1,22 @@
+# flyctl launch added from app/.gitignore
+# Dependencies
+app/**/node_modules
+
+# Compiled output
+app/**/dist
+
+# Environment variables (never commit these)
+app/**/.env
+app/**/.env.local
+app/**/.env.*.local
+
+# Editor and OS files
+app/**/.DS_Store
+app/**/.vscode
+app/**/*.swp
+app/**/.idea
+
+# Logs
+app/**/*.log
+app/**/npm-debug.log*
+fly.toml
