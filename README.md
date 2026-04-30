@@ -24,6 +24,8 @@ The conceptual and design documentation lives in [`docs/`](docs/), organised by 
 **Solution space**
 
 - [`docs/architecture.md`](docs/architecture.md) — the major parts of the system and how they communicate.
+- [`docs/tech-stack.md`](docs/tech-stack.md) — the specific technologies chosen for each architectural role.
+- [`docs/roadmap.md`](docs/roadmap.md) — the sequence in which v1 gets built.
 
 **Adjuncts**
 
@@ -33,4 +35,4 @@ The conceptual and design documentation lives in [`docs/`](docs/), organised by 
 
 ## Status
 
-Early development. The problem-space layers and the architecture are accepted; tech-stack and roadmap decisions, and the first code, are next.
+Design phase complete. All nine layers of the design sequence are settled and documented. First code begins in session 03.
