@@ -29,6 +29,34 @@ how important the technology is in the running system.
 | Env vars / secrets handling   | dotenv (local) + `flyctl secrets` (prod) |
 | Logging                       | pino           |
 
+## The architecture, instantiated
+
+The architecture from Layer 7, with the chosen technologies labelled
+into each role:
+
+```mermaid
+flowchart TB
+    Browser["Browser (PWA client)<br/>iMac · MacBook · iPhone"]
+    AppServer["Node.js Application Server<br/>Fastify + TypeScript<br/>logging via pino"]
+    DB[("PostgreSQL<br/>accessed via Kysely")]
+    Scheduler["Python Scheduler Service<br/>FastAPI"]
+    Host{{"Fly.io<br/>(hosts both services + database)"}}
+
+    Browser -->|HTTP / REST| AppServer
+    AppServer -->|SQL| DB
+    AppServer -->|HTTP / REST| Scheduler
+
+    Host -.hosts.- AppServer
+    Host -.hosts.- Scheduler
+    Host -.hosts.- DB
+```
+
+The two HTTP/REST connections (browser ↔ app server, app server ↔
+scheduler) follow the same protocol; only their endpoints differ. The
+database connection is not HTTP — it is a direct connection from the
+application server to PostgreSQL, mediated by Kysely on the
+TypeScript side and the `pg` driver on the wire.
+
 ## Language: TypeScript over JavaScript
 
 TypeScript is JavaScript plus *static type checking* — types are
