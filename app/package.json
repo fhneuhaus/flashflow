@@ -7,16 +7,26 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+   "migrate": "dotenv -e .env -- node-pg-migrate --migration-file-language sql",
+"migrate:up": "dotenv -e .env -- node-pg-migrate --migration-file-language sql up",
+"migrate:down": "dotenv -e .env -- node-pg-migrate --migration-file-language sql down",
+"migrate:create": "dotenv -e .env -- node-pg-migrate --migration-file-language sql create"
   },
   "author": "Friedrich Neuhaus",
   "license": "UNLICENSED",
   "private": true,
   "devDependencies": {
     "@types/node": "^25.6.0",
+    "@types/pg": "^8.20.0",
+    "dotenv-cli": "^11.0.0",
+    "node-pg-migrate": "^8.0.4",
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "fastify": "^5.8.5"
+    "dotenv": "^17.4.2",
+    "fastify": "^5.8.5",
+    "kysely": "^0.28.16",
+    "pg": "^8.20.0"
   }
 }
